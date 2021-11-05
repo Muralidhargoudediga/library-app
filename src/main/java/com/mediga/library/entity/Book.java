@@ -1,5 +1,7 @@
 package com.mediga.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,13 +9,15 @@ import java.util.List;
 @Entity
 public class Book {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
     private LocalDateTime releaseDate;
+    @Column(columnDefinition = "bit(1) DEFAULT 1")
     private Boolean isAvailable;
     private String isbn;
+    private String language;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "book_category",
@@ -31,6 +35,7 @@ public class Book {
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "book")
     private List<Subscription> subscriptions;
 
@@ -116,5 +121,21 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public Shelf getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(Shelf shelf) {
+        this.shelf = shelf;
     }
 }

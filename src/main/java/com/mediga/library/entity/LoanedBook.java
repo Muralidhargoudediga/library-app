@@ -1,5 +1,8 @@
 package com.mediga.library.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -7,17 +10,24 @@ import java.time.LocalDateTime;
 public class LoanedBook {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @Column(name = "book_id")
+    private Long bookId;
+
+    @Column( name = "user_id")
+    private Long userId;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "book_id", insertable = false, updatable = false)
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @CreationTimestamp
     private LocalDateTime loanDate;
     private LocalDateTime dueDate;
     private LocalDateTime returnedDate;
@@ -32,6 +42,22 @@ public class LoanedBook {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Book getBook() {

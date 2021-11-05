@@ -1,5 +1,8 @@
 package com.mediga.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,11 +10,13 @@ import java.util.List;
 public class Author {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
 
+   // @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private List<Book> books;
 

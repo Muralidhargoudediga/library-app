@@ -1,5 +1,8 @@
 package com.mediga.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,11 +10,14 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String description;
 
+    //You can Ignore to produce JSON output of a property by @JsonIgnore
+    //Or If you have any lazy loaded properties having a relationship. You can use this annotation at top of the property.
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private List<Book> books;
 
@@ -29,14 +35,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public List<Book> getBooks() {
