@@ -5,6 +5,7 @@ import com.mediga.library.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ public class LibraryController {
 
     private LibraryService libraryService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping("/search/{searchType}/{searchString}")
     public List<Book> searchBooks(@PathVariable String searchType, @PathVariable String searchString ) {
         try{
@@ -27,6 +29,7 @@ public class LibraryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @PostMapping("/loan_book/{userId}/{bookId}")
     public ResponseEntity loanBook(@PathVariable long userId, @PathVariable long bookId) {
         try{
@@ -37,6 +40,7 @@ public class LibraryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @PostMapping("return_book/{userId}/{bookId}")
     public ResponseEntity returnBook(@PathVariable long userId, @PathVariable long bookId) {
         try{

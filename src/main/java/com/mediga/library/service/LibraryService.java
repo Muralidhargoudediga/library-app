@@ -62,14 +62,15 @@ public class LibraryService {
             subscriptionService.subscribe(userId, bookId);
             throw new BookNotAvailableException("Book with id : " + bookId + " is not available");
         }
-        book.setAvailable(false);
-        bookRepository.save(book);
         LoanedBook loanedBook = new LoanedBook();
         loanedBook.setBookId(bookId);
         loanedBook.setUserId(userId);
         loanedBook.setStatus(LoanStatus.PENDING);
         loanedBook.setDueDate(LocalDateTime.now().plusDays(7));
-        return loanedBookRepository.save(loanedBook);
+        loanedBook = loanedBookRepository.save(loanedBook);
+        book.setAvailable(false);
+        bookRepository.save(book);
+        return loanedBook;
     }
 
     public void returnBook(long userId, long bookId) {

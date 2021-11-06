@@ -1,10 +1,14 @@
 package com.mediga.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -13,25 +17,29 @@ public class Book {
     private Long id;
     private String name;
     private String description;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime releaseDate;
     @Column(columnDefinition = "bit(1) DEFAULT 1")
     private Boolean isAvailable;
     private String isbn;
     private String language;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "book_category",
     joinColumns = @JoinColumn(name = "book_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
-    List<Category> categories;
+    Set<Category> categories;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "book_author",
     joinColumns = @JoinColumn(name = "book_id"),
     inverseJoinColumns = @JoinColumn(name = "author_id"))
-    List<Author> authors;
+    Set<Author> authors;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
@@ -39,7 +47,8 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Subscription> subscriptions;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "shelf_id")
     private Shelf shelf;
 
@@ -75,19 +84,19 @@ public class Book {
         this.releaseDate = releaseDate;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
-    public List<Author> getAuthors() {
+    public Set<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
+    public void setAuthors(Set<Author> authors) {
         this.authors = authors;
     }
 

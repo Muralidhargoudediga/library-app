@@ -1,5 +1,6 @@
 package com.mediga.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Subscription {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
     @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime subscriptionTime;
 
     public Long getId() {

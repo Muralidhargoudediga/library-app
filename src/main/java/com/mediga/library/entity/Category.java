@@ -17,9 +17,9 @@ public class Category {
     //You can Ignore to produce JSON output of a property by @JsonIgnore
     //Or If you have any lazy loaded properties having a relationship. You can use this annotation at top of the property.
     //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonIgnore
+    /*@JsonIgnore
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    private List<Book> books;
+    private List<Book> books;*/
 
     public Long getId() {
         return id;
@@ -37,11 +37,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Book> getBooks() {
+/*    public List<Book> getBooks() {
         return books;
     }
 
     public void setBooks(List<Book> books) {
         this.books = books;
-    }
+    }*/
 }
